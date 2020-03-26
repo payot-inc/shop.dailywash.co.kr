@@ -1,0 +1,124 @@
+body,html{height:100%; font-family:'SCDream';font-weight:500}
+ul,li,dl,dt,dd,p,ol{margin:0px;padding:0px;list-style: none;}
+
+#wrap{
+  display:flex;
+  flex-direction: column;
+  height:100%;
+
+}
+#header{
+  height:60px;
+  background:#2816A7;
+  display:flex;
+  justify-content: space-between;
+  color:#fff;
+  align-items: center;
+  padding:0 20px;
+
+  .logo{font-size:20px;font-family:'SCDream';font-weight:500}
+
+  .user{
+    display:flex;
+    align-items: center;
+
+    .logoutBtn{margin-left:20px;letter-spacing:-0.7px}
+  }
+}
+
+#container{
+  flex:1;
+  display:flex;
+
+  #sideView{
+    font-family:'SCDream';font-weight:500;font-size:14px;
+    width:230px;
+    height:100%;
+    background:#fff;
+    color:#494949;
+    border-right:1px solid #e2e2e2;
+    .v-list-item{padding:0px 10px;;overflow:hidden}
+    .navigation{padding:0px;}
+    .naviBtn{
+      background:#fff;
+      border-bottom:1px solid #e2e2e2;
+      .v-icon{margin-right:10px;}
+      span{font-size:13px;}
+    }
+    .naviBtn.active{color:#2816A7}
+  }
+  
+  #contents{flex:1;padding:20px;background: #f2f2f2;}
+  .inner{background:#fff;box-shadow: 0 0 30px rgba(0,0,0,0.1);height:100%;}
+
+  .contentsHead{
+    height:60px;border-bottom:1px solid #e2e2e2;padding:0 20px;
+    display:flex;
+    align-items: center;
+    .v-icon{margin-right:10px;color:#2816A7}
+    h3{font-weight:500;font-family:'SCDream';font-size:24px;letter-spacing:-1px;}
+  }
+
+  .section_wrap{
+    padding:20px;
+
+    .section{
+      border:1px solid #e2e2e2;
+      display:flex;
+      align-items: center;
+      margin-bottom:20px;
+    }
+  }
+
+  .dateSearch{
+    dl{display:flex;align-items: center;padding:10px 20px}
+    dt{width:150px;border-right:1px solid #e2e2e2;font-family:'SCDream';}
+    dd{
+      padding:0 20px;display:flex;
+      .date_select{margin-right:10px;}
+      .v-input__slot{min-height:32px;margin:0px;}
+      .v-text-field{padding:0px;margin:0px;}
+      .v-text-field__details{display:none;}
+    }
+  }
+
+  .data_section{
+    .v-data-table{border-radius: 0;width:100%;}
+    .v-data-table-header{background:#f2f2f2;}
+  }
+
+  .section.calculate{
+    border:0px;
+    font-family:'SCDream';
+
+    .v-expansion-panel-header{
+      align-items: flex-start;
+      .complate_date{
+        flex-basis:300;display:flex;flex-direction:row;
+        align-items: center;
+        strong{color:#2816A7;font-weight:400}
+        span{font-weight:400;color:#888;font-size:12px;margin-left:10px;}
+      }
+      .price{
+        flex:1;display:flex;flex-direction: column;
+        justify-content: center;align-items: flex-end;
+        padding:0 30px;
+      }
+    }
+
+    .v-expansion-panel-content{
+      ul{list-style: none;padding:0px;}
+      li{background:#f8f8f8;
+        
+        padding:20px;margin-bottom:5px;font-size:12px;font-weight:400;
+
+        p{display:flex;align-items:center;justify-content: space-between;margin-bottom:10px;
+          span{color:#888}
+          strong{font-weight:500}
+        }
+        p:last-child{margin-bottom:0px;}
+        
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
   <div class="inner">
     <div class="contentsHead">
       <v-icon>mdi-equalizer</v-icon>
-      <h3>매출정보</h3>
+      <h3>정산내역</h3>
     </div>
 
     <div class="sales section_wrap">
@@ -56,12 +56,44 @@
         </dl>
       </div> <!-- date_section -->
 
-      <div class="data_section section">
-        <v-data-table
-          :headers="headers"
-          :items="desserts"
-          :items-per-page="5"
-        ></v-data-table>
+      <div class="calculate section">
+        <v-expansion-panels>
+          <v-expansion-panel
+            v-for="(item,i) in 5"
+            :key="i"
+          >
+            <v-expansion-panel-header>
+              <div class="complate_date">
+                <strong>정산예정</strong>
+                <span>(2019.11.01~11.10)</span>
+              </div>
+              <div class="price">
+                  <span>387,857원</span>
+              </div>
+            </v-expansion-panel-header>
+
+            <v-expansion-panel-content>
+              <ul>
+                <li>
+                  <p>
+                    <span>정산처리일</span>
+                    <strong>2019.11.24</strong>
+                  </p>
+                </li>
+                <li>
+                  <p>
+                    <span>장비이용횟수</span>
+                    <strong>321회</strong>
+                  </p>
+                  <p>
+                    <span>총 사용금액</span>
+                    <strong>345,400원</strong>
+                  </p>
+                </li>
+              </ul>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </div>
     </div> <!-- section_wrap -->
 
