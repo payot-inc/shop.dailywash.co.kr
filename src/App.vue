@@ -1,19 +1,25 @@
 <template>
   <v-app>
-    <LayoutView>
-      <router-view />
+    <LayoutView v-if="hasRootLayout">
+      <router-view v-if="hasRootLayout" />
     </LayoutView>
+    <router-view v-if="!hasRootLayout" />
   </v-app>
 </template>
 
 <script>
-import Layout from '@/components/layout.vue'
+import Layout from '@/components/layout.vue';
 
 export default {
-  name: "App",
-  components:{
-    LayoutView:Layout
-  }
-
+  name: 'App',
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    LayoutView: Layout,
+  },
+  computed: {
+    hasRootLayout() {
+      return this.$route.name !== 'Login';
+    },
+  },
 };
 </script>

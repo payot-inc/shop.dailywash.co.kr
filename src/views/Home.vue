@@ -6,175 +6,91 @@
     </div>
 
     <div class="sales section_wrap">
-      <div class="dateSearch section">
-        <dl>
-          <dt>날짜검색</dt>
-          <dd>
-            <div class="date_select">
-              <v-menu
-                v-model="menu1"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-              >
-                <template v-slot:activator="{on}">
-                  <v-text-field
-                    single-line
-                    v-model="date1"
-                    readonly
-                    v-on="on"
-                    flat
-                    outlined
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="date1" @input="menu1 = false"></v-date-picker>
-              </v-menu>
-            </div>
-            <div class="date_select">
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-              >
-                <template v-slot:activator="{on}">
-                  <v-text-field
-                    single-line
-                    v-model="date2"
-                    readonly
-                    v-on="on"
-                    flat
-                    outlined
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="date2" @input="menu2 = false"></v-date-picker>
-              </v-menu>
-            </div>
-          </dd>
-        </dl>
-      </div> <!-- date_section -->
+      <DateQuery @update="updateDate" />
 
       <div class="data_section section">
         <v-data-table
+          locale="ko-kr"
+          :loading="loading"
           :headers="headers"
           :items="desserts"
-          :items-per-page="5"
-        ></v-data-table>
+          :items-per-page="10"
+          :hide-default-footer="true"
+        >
+          <template v-slot:item.inputAmount="{ item }">
+            {{ item.inputAmount | numeral('0,0') }}원
+          </template>
+          <template v-slot:item.amount="{ item }"> {{ item.amount | numeral('0,0') }}원 </template>
+          <template v-slot:item.calcId="{ item }">
+            {{ item.calcId ? '완료' : '대기' }}
+          </template>
+          <template v-slot:item.createdAt="{ item }">
+            {{ item.createdAt | moment('YY-MM-DD A hh:mm') }}
+          </template>
+          <template slot="no-data">
+            <v-alert :value="true" color="error" icon="warning">
+              이용내역이 없습니다
+            </v-alert>
+          </template>
+        </v-data-table>
       </div>
-    </div> <!-- section_wrap -->
-
+      <v-pagination v-model="query.page" :length="Math.ceil(totalCount / 10)" @input="updatePage" />
+    </div>
+    <!-- section_wrap -->
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import DateQuery from '@/components/DateQuery.vue';
 
 export default {
   name: 'Sales',
-
+  components: { DateQuery },
   data: () => ({
-    date1: new Date().toISOString().substr(0, 10),
-    date2: new Date().toISOString().substr(0, 10),
-    menu: false,
-    modal: false,
-    menu2: false,
-
+    loading: false,
+    totalCount: 0,
+    query: {
+      page: 1,
+      limit: 10,
+      start: new Date([2020, 3, 1]).toISOString().substr(0, 10),
+      end: new Date().toISOString().substr(0, 10),
+    },
     headers: [
-          {
-            text: 'Dessert (100g serving)',
-            align: 'start',
-            sortable: false,
-            value: 'name',
-          },
-          { text: 'Calories', value: 'calories' },
-          { text: 'Fat (g)', value: 'fat' },
-          { text: 'Carbs (g)', value: 'carbs' },
-          { text: 'Protein (g)', value: 'protein' },
-          { text: 'Iron (%)', value: 'iron' },
-        ],
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            iron: '8%',
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-            iron: '16%',
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-            iron: '0%',
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-            iron: '2%',
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-            iron: '45%',
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-            iron: '22%',
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-            iron: '6%',
-          },
-        ],
+      {
+        text: '장비명',
+        align: 'center',
+        sortable: false,
+        value: 'machineName',
+      },
+      { text: '투입금액', sortable: false, align: 'right', value: 'inputAmount' },
+      { text: '실지급액', sortable: false, align: 'right', value: 'amount' },
+      { text: '투입일시', sortable: false, align: 'center', value: 'createdAt' },
+      { text: '정산상태', sortable: false, align: 'center', value: 'calcId' },
+    ],
+    desserts: [],
   }),
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    ...mapActions(['getUseList']),
+    async getList() {
+      this.loading = true;
+      const list = await this.getUseList(this.query);
+      this.loading = false;
+      this.totalCount = list.count;
+      this.desserts = list.rows;
+    },
+    updatePage(page) {
+      this.getList(false);
+    },
+    updateDate(params) {
+      this.query.page = 1;
+      this.query.start = params.start;
+      this.query.end = params.end;
+      this.getList(true);
+    },
+  },
 };
 </script>

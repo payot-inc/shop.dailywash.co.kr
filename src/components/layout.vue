@@ -2,27 +2,22 @@
   <div id="wrap">
     <Header />
     <div id="container">
-      <SideView/>
+      <SideView />
       <div id="contents">
-        <slot/>
+        <slot />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Header from "./header.vue";
-import SideView from "./side.vue"
+import Header from './header.vue';
+import SideView from './side.vue';
 
 export default {
-  components:{
-    Header, SideView
-  }
-}
-
+  components: {
+    Header,
+    SideView,
+  },
+};
 </script>
-
-<style lang="scss" scoped>
-
-
-</style>
